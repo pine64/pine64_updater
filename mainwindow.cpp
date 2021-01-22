@@ -77,8 +77,7 @@ void MainWindow::Flash()
     };
     QString firmware = ui->firmwareComboBox->currentData().toString();
     if (firmware == "custom") {
-        flashFunc(firmware);
-        // TODO:
+        flashFunc(ui->firmwarePathLineBox->text());
     } else {
         this->ConsolePrint("Downloading firmware...\n");
         QFileInfo fi(firmware);

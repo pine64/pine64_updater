@@ -6,6 +6,7 @@ void FlashingThread::run()
 {
     // zadic.exe --vid 0x28E9 --pid 0x0189 --noprompt
     if (this->driverMissing) {
+#ifdef _WIN32
         emit consoleData("WinUSB driver not found. Installing...");
         QProcess zadic;
         QStringList zadicArgs;
@@ -32,6 +33,7 @@ void FlashingThread::run()
             return;
         }
     }
+#endif
     emit consoleData("Flashing...");
     QProcess dfuUtil;
     QStringList dfuUtilArgs;
