@@ -8,7 +8,11 @@ ConnectPinecilDialog::ConnectPinecilDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
+#ifdef __APPLE__
+    ui->textBrowser->selectAll();
+    ui->textBrowser->setFontPointSize(11);
+    ui->textBrowser->setTextCursor(QTextCursor());
+#endif
 }
 
 ConnectPinecilDialog::~ConnectPinecilDialog()

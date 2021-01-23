@@ -1,5 +1,6 @@
 #include "flashingthread.h"
 
+#include <QCoreApplication>
 #include <QProcess>
 
 void FlashingThread::run()
@@ -51,9 +52,13 @@ void FlashingThread::run()
     connect(&dfuUtil, &QProcess::readyReadStandardError, [this, &dfuUtil] {
         emit this->consoleErrorData(dfuUtil.readAllStandardError());
     });
+#ifdef _WIN32
     dfuUtil.start("dfu-util.exe", dfuUtilArgs);
+#else
+    dfuUtil.start(QCoreApplication::applicationDirPath() + "/dfu-util", dfuUtilArgs);
+#endif
     if (!dfuUtil.waitForFinished(60 * 5 * 1000)) {
-        emit consoleErrorData("Launching dfu-util failed!");
+        emit consoleErrorData(QString("Launching dfu-util failed! Reason: %1").arg(dfuUtil.errorString()));
         emit failed();
         return;
     }

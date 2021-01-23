@@ -38,11 +38,17 @@ win32: LIBS += -L$$PWD/deps/libusb/VS2019/MS64/dll/ -llibusb-1.0
 win32: INCLUDEPATH += $$PWD/deps/libusb/include
 win32: DEPENDPATH += $$PWD/deps/libusb/include
 
+message("$$PWD/deps/libusb/lib/")
+
+macx: LIBS += -L$$PWD/deps/libusb/lib/ -lusb-1.0
+macx: INCLUDEPATH += $$PWD/deps/libusb/include
+macx: DEPENDPATH += $$PWD/deps/libusb/include
+
 DISTFILES += \
     pinecil-instructions.png
 
 RESOURCES += \
     resources.qrc
 
-CONFIG += embed_manifest_exe
+win32: CONFIG += embed_manifest_exe
 QMAKE_LFLAGS_WINDOWS += /MANIFESTUAC:"level='requireAdministrator'"

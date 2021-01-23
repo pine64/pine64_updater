@@ -88,8 +88,8 @@ void MainWindow::Flash()
            binary->write(reply->read(reply->bytesAvailable()));
         });
         connect(reply, &QNetworkReply::finished, [fi, binary, reply, firmware, flashFunc] {
-           binary->close();
-           binary->deleteLater();
+            binary->close();
+            binary->deleteLater();
             reply->deleteLater();
             flashFunc(fi.fileName());
         });
@@ -173,7 +173,7 @@ void MainWindow::updatePinecilStatus()
     }
 
     if (statusChanged) {
-        switch (this->pinecilConnectionStatus) {
+        switch (this->pinecilConnectionStatus.load()) {
         case PinecilConnectionStatusEnum::ConnectedNoDriver:
             ui->statusBar->showMessage("Pinecil is connected (no WinUSB)");
             break;
