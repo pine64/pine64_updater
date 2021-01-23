@@ -33,8 +33,8 @@ void FlashingThread::run()
             emit failed();
             return;
         }
-    }
 #endif
+    }
     emit consoleData("Flashing...");
     QProcess dfuUtil;
     QStringList dfuUtilArgs;

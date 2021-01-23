@@ -56,7 +56,7 @@ void MainWindow::ConsolePrintSuccess(const QString &text)
 void MainWindow::Flash()
 {
     this->ui->flashButton->setEnabled(false);
-    auto flashFunc = [this](QString firmwarePath) {
+    auto flashFunc = [this](QString firmwarePath, bool deleteFirmware = false) {
         FlashingThread *workerThread = new FlashingThread(this, this->pinecilConnectionStatus == PinecilConnectionStatusEnum::ConnectedNoDriver, firmwarePath);
         connect(workerThread, &FlashingThread::consoleData, this, [this](QString data) {
             this->ConsolePrint(data);
@@ -64,13 +64,15 @@ void MainWindow::Flash()
         connect(workerThread, &FlashingThread::consoleErrorData, this, [this](QString data) {
             this->ConsolePrintError(data);
         });
-        connect(workerThread, &FlashingThread::successed, this, [this]() {
+        connect(workerThread, &FlashingThread::successed, this, [this, deleteFirmware, firmwarePath]() {
             this->ConsolePrintSuccess("Your Pinecil was flashed successfully! You can disconnect it safely.");
             this->ui->flashButton->setEnabled(true);
+            if (deleteFirmware) QFile::remove(firmwarePath);
         });
-        connect(workerThread, &FlashingThread::failed, this, [this]() {
+        connect(workerThread, &FlashingThread::failed, this, [this, deleteFirmware, firmwarePath]() {
             this->ConsolePrintError("Flashing failed.");
             this->ui->flashButton->setEnabled(true);
+            if (deleteFirmware) QFile::remove(firmwarePath);
         });
         connect(workerThread, &FlashingThread::finished, workerThread, &QObject::deleteLater);
         workerThread->start();
@@ -91,7 +93,7 @@ void MainWindow::Flash()
             binary->close();
             binary->deleteLater();
             reply->deleteLater();
-            flashFunc(fi.fileName());
+            flashFunc(fi.fileName(), true);
         });
     }
 
