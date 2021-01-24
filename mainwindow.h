@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTemporaryDir>
 #include <QTimer>
 extern "C" {
 #include <libusb-1.0/libusb.h>
@@ -55,6 +56,7 @@ private:
     QUrl binariesDownloadUrl;
     bool flashingPending = false;
     ConnectPinecilDialog* flashPendingDialog = nullptr;
+    QTemporaryDir tempDir;
 
     void ConsolePrint(const QString& text);
     void ConsolePrintError(const QString& text);

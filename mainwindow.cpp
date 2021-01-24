@@ -83,17 +83,18 @@ void MainWindow::Flash()
     } else {
         this->ConsolePrint("Downloading firmware...\n");
         QFileInfo fi(firmware);
-        QFile* binary = new QFile(fi.fileName());
+        QString firmwarePath = QDir(tempDir.path()).filePath(fi.fileName());
+        QFile* binary = new QFile(firmwarePath);
         binary->open(QIODevice::WriteOnly);
         QNetworkReply* reply = this->networkMgr->get(QNetworkRequest(QUrl("http://pinecil.pine64.org/updater/firmwares/" + firmware)));
         connect(reply, &QNetworkReply::readyRead, [binary, reply] {
            binary->write(reply->read(reply->bytesAvailable()));
         });
-        connect(reply, &QNetworkReply::finished, [fi, binary, reply, firmware, flashFunc] {
+        connect(reply, &QNetworkReply::finished, [fi, binary, reply, firmware, flashFunc, firmwarePath] {
             binary->close();
             binary->deleteLater();
             reply->deleteLater();
-            flashFunc(fi.fileName(), true);
+            flashFunc(firmwarePath, true);
         });
     }
 
