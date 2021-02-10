@@ -62,6 +62,9 @@ void MainWindow::Flash()
             this->ConsolePrint(data);
         });
         connect(workerThread, &FlashingThread::consoleErrorData, this, [this](QString data) {
+            if (data.contains("Invalid DFU suffix signature", Qt::CaseInsensitive)) {
+                return;
+            }
             this->ConsolePrintError(data);
         });
         connect(workerThread, &FlashingThread::successed, this, [this, deleteFirmware, firmwarePath]() {
