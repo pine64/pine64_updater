@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->ConsolePrintInfo("<span style='color: blue;'>Pinecil Firmware Updater v1.2</span>");
+    this->ConsolePrintInfo("<span style='color: blue;'>Pinecil Firmware Updater v1.3</span>");
     this->ConsolePrint("Looking for firmwares and latest version...");
 
     this->networkMgr = new QNetworkAccessManager(this);
@@ -124,7 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
             QJsonObject firmware = firmwareValue.toObject();
             ui->firmwareComboBox->addItem(firmware["name"].toString(), firmware["file"].toString());
         }
-        if (json["latest_version"].toString() != "1.2") {
+        if (json["latest_version"].toString().toDouble() > 1.3) {
             QMessageBox msgBox;
             msgBox.setText("New version of Pinecil Firmware Updater was found.");
             msgBox.setInformativeText("Do you want to download it?");

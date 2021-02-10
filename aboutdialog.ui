@@ -39,7 +39,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Pinecil Firmware Updater v1.2 by gamiee</string>
+    <string>Pinecil Firmware Updater v1.3 by gamiee</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
