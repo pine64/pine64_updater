@@ -56,8 +56,8 @@ void MainWindow::ConsolePrintSuccess(const QString &text)
 void MainWindow::Flash()
 {
     this->ui->flashButton->setEnabled(false);
-    auto flashFunc = [this](QString firmwarePath, bool deleteFirmware = false) {
-        FlashingThread *workerThread = new FlashingThread(this, this->pinecilConnectionStatus == PinecilConnectionStatusEnum::ConnectedNoDriver, firmwarePath);
+    auto flashFunc = [this](QString firmwarePath, bool deleteFirmware = false, bool massErase = false) {
+        FlashingThread *workerThread = new FlashingThread(this, this->pinecilConnectionStatus == PinecilConnectionStatusEnum::ConnectedNoDriver, firmwarePath, massErase);
         connect(workerThread, &FlashingThread::consoleData, this, [this](QString data) {
             this->ConsolePrint(data);
         });
@@ -78,8 +78,9 @@ void MainWindow::Flash()
         workerThread->start();
     };
     QString firmware = ui->firmwareComboBox->currentData().toString();
+    bool massErase = this->ui->massEraseCheckBox->isChecked();
     if (firmware == "custom") {
-        flashFunc(ui->firmwarePathLineBox->text());
+        flashFunc(ui->firmwarePathLineBox->text(), false, massErase);
     } else {
         this->ConsolePrint("Downloading firmware...\n");
         QFileInfo fi(firmware);
@@ -90,11 +91,11 @@ void MainWindow::Flash()
         connect(reply, &QNetworkReply::readyRead, [binary, reply] {
            binary->write(reply->read(reply->bytesAvailable()));
         });
-        connect(reply, &QNetworkReply::finished, [fi, binary, reply, firmware, flashFunc, firmwarePath] {
+        connect(reply, &QNetworkReply::finished, [fi, binary, reply, firmware, flashFunc, firmwarePath, massErase] {
             binary->close();
             binary->deleteLater();
             reply->deleteLater();
-            flashFunc(firmwarePath, true);
+            flashFunc(firmwarePath, true, massErase);
         });
     }
 

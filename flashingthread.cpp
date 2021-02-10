@@ -45,7 +45,7 @@ void FlashingThread::run()
     dfuUtilArgs.append("-D");
     dfuUtilArgs.append(this->firmwarePath);
     dfuUtilArgs.append("-s");
-    dfuUtilArgs.append("0x08000000:mass-erase:force");
+    dfuUtilArgs.append(QString("0x08000000") + (this->massErase ? ":mass-erase:force" : ""));
     connect(&dfuUtil, &QProcess::readyReadStandardOutput, [this, &dfuUtil] {
         emit this->consoleData(dfuUtil.readAllStandardOutput());
     });
