@@ -44,6 +44,8 @@ macx: LIBS += -L$$PWD/deps/libusb/lib/ -lusb-1.0
 macx: INCLUDEPATH += $$PWD/deps/libusb/include
 macx: DEPENDPATH += $$PWD/deps/libusb/include
 
+unix:!android: LIBS += -lusb-1.0
+
 DISTFILES += \
     pinecil-instructions.png
 
