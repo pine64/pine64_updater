@@ -137,7 +137,11 @@ MainWindow::MainWindow(QWidget *parent)
         reply->deleteLater();
         this->initLibUsb();
     });
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     connect(reply, &QNetworkReply::errorOccurred, [this] {
+#else
+    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [this] {
+#endif
         this->ConsolePrintWarning("Failed to fetch firmwares.");
         this->initLibUsb();
     });
