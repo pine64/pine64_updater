@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include "flashingthread.h"
 #include "aboutdialog.h"
+#include "config.h"
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QThread>
@@ -68,7 +69,7 @@ void MainWindow::Flash()
             this->ConsolePrintError(data);
         });
         connect(workerThread, &FlashingThread::successed, this, [this, deleteFirmware, firmwarePath]() {
-            this->ConsolePrintSuccess("Your Pinecil was flashed successfully! You can disconnect it safely.");
+            this->ConsolePrintSuccess("Your " + Config::deviceName + " was flashed successfully! You can disconnect it safely.");
             this->ui->flashButton->setEnabled(true);
             if (deleteFirmware) QFile::remove(firmwarePath);
         });
@@ -90,7 +91,7 @@ void MainWindow::Flash()
         QString firmwarePath = QDir(tempDir.path()).filePath(fi.fileName());
         QFile* binary = new QFile(firmwarePath);
         binary->open(QIODevice::WriteOnly);
-        QNetworkReply* reply = this->networkMgr->get(QNetworkRequest(QUrl("http://pinecil.pine64.org/updater/firmwares/" + firmware)));
+        QNetworkReply* reply = this->networkMgr->get(QNetworkRequest(QUrl(Config::firmwareFolder + firmware)));
         connect(reply, &QNetworkReply::readyRead, [binary, reply] {
            binary->write(reply->read(reply->bytesAvailable()));
         });
@@ -115,7 +116,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->ConsolePrint("Looking for firmwares and latest version...");
 
     this->networkMgr = new QNetworkAccessManager(this);
-    QNetworkReply* reply = this->networkMgr->get(QNetworkRequest(QUrl("http://pinecil.pine64.org/updater/info.json")));
+    QNetworkReply* reply = this->networkMgr->get(QNetworkRequest(QUrl(Config::firmwareInfo)));
     connect(reply, &QNetworkReply::finished, [this, reply]() {
         QJsonParseError jsonErr;
         QJsonDocument jsonDoc = QJsonDocument::fromJson(((QString)reply->readAll()).toUtf8(), &jsonErr);
@@ -131,7 +132,7 @@ MainWindow::MainWindow(QWidget *parent)
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
             if (msgBox.exec() == QMessageBox::Yes) {
-                QDesktopServices::openUrl(QUrl("https://github.com/pine64/pinecil-firmware-updater/releases/latest"));
+                QDesktopServices::openUrl(QUrl(Config::updaterUrl));
             }
         }
         reply->deleteLater();
@@ -166,7 +167,7 @@ void MainWindow::updatePinecilStatus()
         for (int i = 0; i < devicesCount; i++) {
             libusb_device_descriptor desc;
             err = libusb_get_device_descriptor(devices[i], &desc);
-            if (err == 0 && desc.idVendor == 0x28e9 && desc.idProduct == 0x0189) {
+            if (err == 0 && desc.idVendor == Config::dfuVID && desc.idProduct == Config::dfuPID) {
                 libusb_device_handle* devHandle;
                 int resp = libusb_open(devices[i], &devHandle);
                 if (resp == LIBUSB_ERROR_NOT_SUPPORTED) {
@@ -186,16 +187,16 @@ void MainWindow::updatePinecilStatus()
     if (statusChanged) {
         switch (this->pinecilConnectionStatus.load()) {
         case PinecilConnectionStatusEnum::ConnectedNoDriver:
-            ui->statusBar->showMessage("Pinecil is connected (no WinUSB)");
+            ui->statusBar->showMessage(Config::deviceName + " is connected (no WinUSB)");
             break;
         case PinecilConnectionStatusEnum::Error:
-            ui->statusBar->showMessage("Pinecil is connected but there is communication error.");
+            ui->statusBar->showMessage(Config::deviceName + " is connected but there is communication error.");
             break;
         case PinecilConnectionStatusEnum::Disconnected:
-            ui->statusBar->showMessage("Pinecil is not connected.");
+            ui->statusBar->showMessage(Config::deviceName + " is not connected.");
             break;
         case PinecilConnectionStatusEnum::Connected:
-            ui->statusBar->showMessage("Pinecil is connected.");
+            ui->statusBar->showMessage(Config::deviceName + " is connected.");
             break;
         }
         if (this->flashingPending && (this->pinecilConnectionStatus == PinecilConnectionStatusEnum::ConnectedNoDriver || this->pinecilConnectionStatus == PinecilConnectionStatusEnum::Connected)) {

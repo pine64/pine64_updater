@@ -1,4 +1,5 @@
 #include "flashingthread.h"
+#include "config.h"
 
 #include <QCoreApplication>
 #include <QProcess>
@@ -12,9 +13,9 @@ void FlashingThread::run()
         QProcess zadic;
         QStringList zadicArgs;
         zadicArgs.append("--vid");
-        zadicArgs.append("0x28E9");
+        zadicArgs.append(QString("0x%1").arg(Config::dfuVID, 4, 16, QChar('0')));
         zadicArgs.append("--pid");
-        zadicArgs.append("0x0189");
+        zadicArgs.append(QString("0x%1").arg(Config::dfuPID, 4, 16, QChar('0')));
         zadicArgs.append("--noprompt");
         connect(&zadic, &QProcess::readyReadStandardOutput, [this, &zadic] {
             emit this->consoleData(zadic.readAllStandardOutput());
@@ -39,13 +40,13 @@ void FlashingThread::run()
     QProcess dfuUtil;
     QStringList dfuUtilArgs;
     dfuUtilArgs.append("-d");
-    dfuUtilArgs.append("28e9:0189");
+    dfuUtilArgs.append(QString("%1").arg(Config::dfuVID, 4, 16, QChar('0')) + QString(":%1").arg(Config::dfuPID, 4, 16, QChar('0')));
     dfuUtilArgs.append("-a");
-    dfuUtilArgs.append("0");
+    dfuUtilArgs.append(QString("%1").arg(Config::dfuAlternate));
     dfuUtilArgs.append("-D");
     dfuUtilArgs.append(this->firmwarePath);
     dfuUtilArgs.append("-s");
-    dfuUtilArgs.append(QString("0x08000000") + (this->massErase ? ":mass-erase:force" : ""));
+    dfuUtilArgs.append(QString("0x%1").arg(Config::dfuseAddress, 8, 16, QChar('0')) + (this->massErase ? ":mass-erase:force" : ""));
     connect(&dfuUtil, &QProcess::readyReadStandardOutput, [this, &dfuUtil] {
         emit this->consoleData(dfuUtil.readAllStandardOutput());
     });

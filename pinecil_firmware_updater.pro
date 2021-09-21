@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    config.cpp \
     aboutdialog.cpp \
     connectpinecildialog.cpp \
     flashingthread.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    config.h \
     aboutdialog.h \
     connectpinecildialog.h \
     flashingthread.h \
