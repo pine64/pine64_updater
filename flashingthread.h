@@ -14,8 +14,8 @@ protected:
     void run();
 private:
     bool driverMissing;
-    bool massErase;
     QString firmwarePath;
+    bool massErase;
 
 signals:
     void successed();
