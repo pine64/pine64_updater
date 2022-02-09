@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
+import 'package:archive/archive.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
@@ -48,6 +50,8 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
   bool _errorOccured = false;
   late Future<List<_FirmwareEntry>> _firmwareListFuture;
   String? _firmwareType;
+  final _dio = Dio();
+  String? _pinecilZipUrl;
 
   bool get _isPinecilConnected => (_pinecilState == _PinecilState.Connected ||
       _pinecilState == _PinecilState.ConnectedNoDriver);
@@ -72,17 +76,35 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
   }
 
   Future<List<_FirmwareEntry>> getLatestFirmwares() async {
-    final response = await http
-        .get(Uri.parse('http://updater.pine64.org/pinecil/firmwares.php'));
-    if (response.statusCode == 200) {
-      final firmwares = jsonDecode(response.body);
+    try {
+      final githubResponse = await _dio
+          .get("https://api.github.com/repos/Ralim/IronOS/releases/latest");
+      if (githubResponse.statusCode != 200) {
+        throw "Failed to fetch Github releases";
+      }
+      List<dynamic> assets = githubResponse.data['assets'];
+      _pinecilZipUrl = assets.singleWhere((element) =>
+          element['name'] == 'Pinecil.zip')?['browser_download_url'];
+      final metadata =
+          assets.singleWhere((element) => element['name'] == "metadata.zip");
+      final metadataRequest = await _dio.get(metadata['browser_download_url'],
+          options: Options(responseType: ResponseType.bytes));
+      final metadataZip = ZipDecoder().decodeBytes(metadataRequest.data);
+      final pinecilJsonFile =
+          metadataZip.singleWhere((element) => element.name == "Pinecil.json");
+      final pinecilMetadata = jsonDecode(utf8.decode(pinecilJsonFile.content));
       return List<_FirmwareEntry>.generate(
-          firmwares.length,
-          (index) => _FirmwareEntry(
-              firmwares[index]['name'], firmwares[index]['file']));
-    } else {
-      return List<_FirmwareEntry>.empty();
+          pinecilMetadata['contents'].keys.length, (index) {
+        final firmwareFile = pinecilMetadata['contents'].keys.toList()[index];
+        final firmwareInfo = pinecilMetadata['contents'][firmwareFile];
+        return _FirmwareEntry(
+            "IronOS ${pinecilMetadata['release']} - ${firmwareInfo['language_name']}",
+            firmwareFile);
+      });
+    } catch (ex) {
+      print(ex);
     }
+    return List<_FirmwareEntry>.empty();
   }
 
   void updatePinecilStatus(Timer timer) {
@@ -182,21 +204,30 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
 
     // region Download Firmware
     if (firmwareURL != null) {
-      var dio = Dio();
       setState(() {
         _state = "Downloading firmware... 0%";
         _log.add(_LogMessage("Downloading firmware " + firmwareURL, false));
       });
       try {
-        await dio.download(
-          "http://updater.pine64.org/pinecil/firmware/" + firmwareURL,
-          "$currentWorkingDirectory/_tmpfirm.dfu",
+        final firmwaresZipResponse = await _dio.get(
+          _pinecilZipUrl!,
           onReceiveProgress: (count, total) => setState(() {
             _state =
-                "Downloading firmware... ${((count / total) * 100.0).round()})%";
+                "Downloading firmware... ${((count / total) * 100.0).round()}%";
             _progress = ((count / total) * 45.0).round();
           }),
+          options: Options(responseType: ResponseType.bytes),
         );
+        final firmwaresZip =
+            ZipDecoder().decodeBytes(firmwaresZipResponse.data);
+
+        final firmwareZipFile = firmwaresZip.files
+            .singleWhere((element) => element.name == firmwareURL);
+        final firmwareFile = File("$currentWorkingDirectory/_tmpfirm.dfu");
+        await firmwareFile.create();
+        await firmwareFile.writeAsBytes(firmwareZipFile.content);
+        // TODO: Handle errors
+
         setState(() {
           _log.add(_LogMessage("Dowloading completed", false));
         });
