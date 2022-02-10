@@ -25,7 +25,7 @@ class AboutPage extends StatelessWidget {
                 "Huge thanks for everyone from community who helped with testing and giving feedback."),
             const SizedBox(height: 16.0),
             const Text(
-                "This application uses open-source software, you can find their licenses in LICENSE file.")
+                "This application uses open-source software, you can find their licenses in LICENSE_3RD_PARTY file.")
           ],
         ),
       ),

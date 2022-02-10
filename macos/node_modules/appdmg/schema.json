@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "background": {
+      "type": "string"
+    },
+    "background-color": {
+      "type": "string",
+      "format": "css-color"
+    },
+    "icon-size": {
+      "type": "integer"
+    },
+    "window": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "integer"
+            },
+            "y": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ]
+        },
+        "size": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "width",
+            "height"
+          ]
+        }
+      }
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "UDRW",
+        "UDRO",
+        "UDCO",
+        "UDZO",
+        "ULFO",
+        "UDBZ"
+      ]
+    },
+    "contents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer"
+          },
+          "y": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "link",
+              "file",
+              "position"
+            ]
+          },
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "x",
+          "y",
+          "type",
+          "path"
+        ]
+      }
+    },
+    "code-sign": {
+      "type": "object",
+      "properties": {
+        "signing-identity": {
+          "type": "string"
+        },
+        "identifier": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "signing-identity"
+      ]
+    }
+  },
+  "required": [
+    "title",
+    "contents"
+  ]
+}

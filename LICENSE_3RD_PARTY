@@ -1,0 +1,4 @@
+PINE64 Updater uses several open-source libraries:
+- Flutter: BSD 3-Clause "New" or "Revised" License, Copyright 2014 The Flutter Authors.
+- libusb: GNU Lesser General Public License v2.1, Copyright libusb team
+- dfu-util: GNU General Public License v2.0, Copyright dfu-util team
