@@ -15,13 +15,13 @@ typedef _libusb_get_device_list_t = Int64 Function(
 typedef _libusb_free_device_list_t = Void Function(
     Pointer<Pointer<_LibUSBDevice>> list, Int32 unref_devices);
 typedef _libusb_get_device_descriptor_t = Int32 Function(
-    Pointer<_LibUSBDevice> device, Pointer<LibUSBDeviceDescriptor> descriptor);
+    Pointer<_LibUSBDevice> device, Pointer<_LibUSBDeviceDescriptor> descriptor);
 typedef _libusb_open_t = Int32 Function(Pointer<_LibUSBDevice> device,
     Pointer<Pointer<_LibUSBDeviceHandle>> deviceHandle);
 typedef _libusb_close_t = Int32 Function(
     Pointer<_LibUSBDeviceHandle> deviceHandle);
 
-class LibUSBDeviceDescriptor extends Struct {
+class _LibUSBDeviceDescriptor extends Struct {
   @Uint8()
   external int bLength;
   @Uint8()
@@ -50,6 +50,15 @@ class LibUSBDeviceDescriptor extends Struct {
   external int iSerialNumber;
   @Uint8()
   external int bNumConfigurations;
+}
+
+class LibUSBDeviceDescriptor {
+  final int idVendor;
+  final int idProduct;
+
+  LibUSBDeviceDescriptor.fromStruct(_LibUSBDeviceDescriptor struct)
+    : idVendor = struct.idVendor,
+      idProduct = struct.idProduct;
 }
 
 class LibUSBDeviceList {
@@ -103,7 +112,7 @@ class _LibUSB {
           Pointer<Pointer<_LibUSBDevice>> list, int unref_devices)
       _free_device_list;
   late final int Function(Pointer<_LibUSBDevice> device,
-      Pointer<LibUSBDeviceDescriptor> descriptor) _get_device_descriptor;
+      Pointer<_LibUSBDeviceDescriptor> descriptor) _get_device_descriptor;
   late final int Function(Pointer<_LibUSBDevice> device,
       Pointer<Pointer<_LibUSBDeviceHandle>> deviceHandle) _open;
   late final int Function(Pointer<_LibUSBDeviceHandle> deviceHandle) _close;
@@ -112,7 +121,11 @@ class _LibUSB {
   bool get initialized => _initialized;
 
   _LibUSB() {
-    _dyLib = DynamicLibrary.open('${Directory.current.path}/libusb-1.0.dll');
+    if (Platform.isWindows) {
+      _dyLib = DynamicLibrary.open('${Directory.current.path}/libusb-1.0.dll');
+    } else if (Platform.isMacOS) {
+      _dyLib = DynamicLibrary.open('libusb-1.0.0.dylib');
+    }
     _init = _dyLib
         .lookup<NativeFunction<_libusb_init_t>>('libusb_init')
         .asFunction();
@@ -159,12 +172,13 @@ class _LibUSB {
   }
 
   LibUSBDeviceDescriptor getDeviceDescriptor(Pointer<_LibUSBDevice> device) {
-    final descriptorPtr = calloc<LibUSBDeviceDescriptor>();
+    final descriptorPtr = calloc<_LibUSBDeviceDescriptor>();
     int err = _get_device_descriptor(device, descriptorPtr);
     if (err < 0) {
       throw LibUSBException('LibUSB get device descriptor failed', err);
     }
-    final descriptor = descriptorPtr.ref;
+    final descriptorStruct = descriptorPtr.ref;
+    final descriptor = LibUSBDeviceDescriptor.fromStruct(descriptorStruct);
     calloc.free(descriptorPtr);
     return descriptor;
   }

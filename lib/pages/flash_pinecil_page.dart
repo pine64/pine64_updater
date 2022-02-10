@@ -113,7 +113,8 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
       _previousDevicesCount = devicesList.devices.length;
       _pinecilState = _PinecilState.Disconnected;
       for (var device in devicesList.devices) {
-        final descriptor = libUSB.getDeviceDescriptor(device);
+        var descriptor = libUSB.getDeviceDescriptor(device);
+        print(descriptor.idVendor.toRadixString(16) + " / " + descriptor.idProduct.toRadixString(16));
         if (descriptor.idVendor == 0x28E9 && descriptor.idProduct == 0x0189) {
           try {
             final deviceHandle = libUSB.open(device);
@@ -224,7 +225,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
         final firmwareZipFile = firmwaresZip.files
             .singleWhere((element) => element.name == firmwareURL);
         final firmwareFile = File("$currentWorkingDirectory/_tmpfirm.dfu");
-        await firmwareFile.create();
+        await firmwareFile.create(recursive: true);
         await firmwareFile.writeAsBytes(firmwareZipFile.content);
         // TODO: Handle errors
 

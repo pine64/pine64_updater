@@ -49,3 +49,4 @@ app.*.map.json
 /*.dll
 /*.exe
 /*.dfu
+/macos/*.dylib
