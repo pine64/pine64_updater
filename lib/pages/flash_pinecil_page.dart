@@ -335,6 +335,8 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
         children: [
           const Text('Instructions:'),
           const Text(
+              '0. Step: Make sure that you do not have a barrel jack PSU plugged in'),
+          const Text(
               '1. Step: Hold the minus button (closer to power connector)'),
           const Text('2. Step: Connect Pinecil via USB-C connector'),
           const Text('3. Step: Release minus button'),
