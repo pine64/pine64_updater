@@ -1,17 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pine64_updater/libs/libusb.dart';
+import 'package:pine64_updater/pages/about_page.dart';
 import 'package:pine64_updater/pages/flash_pinecil_page.dart';
 
 import 'libs/libdfu.dart';
 import 'pages/pick_device_page.dart';
 
-void main() {
+void main() async {
   currentWorkingDirectory = Directory.current.path;
   libUSB.init();
   libDFU.init();
   runApp(const Pine64UpdaterApp());
+  packageInfo = await PackageInfo.fromPlatform();
 }
 
 class Pine64UpdaterApp extends StatelessWidget {
@@ -35,9 +38,11 @@ class Pine64UpdaterApp extends StatelessWidget {
       routes: {
         '/': (context) => const PickDevicePage(),
         '/flash/pinecil': (context) => const FlashPinecilPage(),
+        '/about': (context) => const AboutPage(),
       },
     );
   }
 }
 
 late String currentWorkingDirectory;
+late PackageInfo packageInfo;

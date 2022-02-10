@@ -1,5 +1,5 @@
 name: pine64_updater
-description: A new Flutter project.
+description: Updater for PINE64 devices
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -41,6 +41,8 @@ dependencies:
   http: ^0.13.4
   dio: ^4.0.4
   archive: ^3.1.11
+  package_info_plus: ^1.3.0
+  url_launcher: ^6.0.19
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../main.dart';
 
 class _DeviceCard extends StatelessWidget {
   void Function()? onTap;
@@ -44,8 +49,50 @@ class PickDevicePage extends StatefulWidget {
 }
 
 class _PickDevicePageState extends State<PickDevicePage> {
+  static bool _checkedForUpdates = false;
+
+  void _checkForUpdates(BuildContext context) async {
+    final dio = Dio();
+    try {
+      final latestReleaseInfo = await dio.get(
+          "https://api.github.com/repos/pine64/pine64_updater/releases/latest");
+      if (latestReleaseInfo.data['tag_name'] != packageInfo.version) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('New update available!'),
+                content: Text('Do you want redirect to download page?'),
+                actions: <Widget>[
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        launch(
+                            "https://github.com/pine64/pine64_updater/releases/latest");
+                      },
+                      child: Text('Yes')),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('No'),
+                  )
+                ],
+              );
+            });
+      }
+    } catch (ex) {
+      print(ex);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!_checkedForUpdates) {
+      _checkedForUpdates = true;
+      _checkForUpdates(context);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pick a device to update'),
@@ -64,19 +111,18 @@ class _PickDevicePageState extends State<PickDevicePage> {
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-                Navigator.pushNamed(context, '/settings');
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.info_outline),
               title: const Text('About'),
               onTap: () {
                 Navigator.pushNamed(context, '/about');
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.bug_report_outlined),
+              title: const Text('Report a bug'),
+              onTap: () =>
+                  launch("https://github.com/pine64/pine64_updater/issues"),
+            )
           ],
         ),
       ),
