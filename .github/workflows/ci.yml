@@ -46,4 +46,11 @@ jobs:
           channel: "beta"
       - run: flutter config --enable-macos-desktop
       # Run the main build
-      - run: flutter build macos
+      - run: cd macos && npm install && npm run build
+
+      - name: Upload results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Pine Updater (MacOS)
+          path: build/pine64_updater.dmg
+          if-no-files-found: error
