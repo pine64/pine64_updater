@@ -14,6 +14,7 @@ Application for updating PINE64 devices, such as Pinecil.
 - [X] MacOS
 - [ ] Linux
 - [ ] Android
+- [ ] Web
 
 # How to download & install
 
