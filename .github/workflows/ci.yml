@@ -45,6 +45,11 @@ jobs:
         with:
           channel: "beta"
       - run: flutter config --enable-macos-desktop
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "17"
+
       # Run the main build
       - run: cd macos && npm install && npm run build
 
