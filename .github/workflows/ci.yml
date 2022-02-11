@@ -50,6 +50,8 @@ jobs:
         with:
           node-version: "17"
 
+      - run: flutter build macos
+
       # Run the main build
       - run: cd macos && npm install && npm run build
 
