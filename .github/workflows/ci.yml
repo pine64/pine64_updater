@@ -1,6 +1,8 @@
 name: CI
 
 on: [push, pull_request]
+# On pushes to the main repo OR a pull request, we run all of the builds and upload the assets
+# Also runs formatting checks and code errors on the linux host (as its usually faster to get allocated resources)
 
 jobs:
   build-linux:
@@ -14,7 +16,15 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y ninja-build libgtk-3-dev
       - run: flutter config --enable-linux-desktop
-      - run: flutter build linux
+      # Check for any formatting issues in the code.
+      - run: flutter format --set-exit-if-changed .
+
+      # Statically analyze the Dart code for any errors.
+      - run: flutter analyze .
+
+      # Run main build -- Not working yet as no linux build
+      # - run: flutter build linux
+
   build-windows:
     runs-on: windows-latest
     steps:
@@ -23,4 +33,17 @@ jobs:
         with:
           channel: "beta"
       - run: flutter config --enable-windows-desktop
+
+      # Run the main build
       - run: flutter build windows
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "beta"
+      - run: flutter config --enable-macos-desktop
+      # Run the main build
+      - run: flutter build macos
