@@ -33,9 +33,10 @@ class _LogMessage {
 
 class _FirmwareEntry {
   final String name;
-  final String url;
+  final String fileName;
+  final String zipUrl;
 
-  _FirmwareEntry(this.name, this.url);
+  _FirmwareEntry(this.name, this.fileName, this.zipUrl);
 }
 
 class _FlashPinecilPageState extends State<FlashPinecilPage> {
@@ -49,23 +50,23 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
   int _progress = 0;
   bool _errorOccured = false;
   late Future<List<_FirmwareEntry>> _firmwareListFuture;
-  String? _firmwareType;
+  _FirmwareEntry? _firmwareToFlash;
   final _dio = Dio();
-  String? _pinecilZipUrl;
 
   bool get _isPinecilConnected => (_pinecilState == _PinecilState.Connected ||
       _pinecilState == _PinecilState.ConnectedNoDriver);
   final _firmwarePathController = TextEditingController();
 
-  void startUSBTimer() {
-    _usbTimer = Timer.periodic(const Duration(seconds: 1), updatePinecilStatus);
+  void _startUSBTimer() {
+    _usbTimer =
+        Timer.periodic(const Duration(seconds: 1), _updatePinecilStatus);
   }
 
   @override
   void initState() {
     super.initState();
-    startUSBTimer();
-    _firmwareListFuture = getLatestFirmwares();
+    _startUSBTimer();
+    _firmwareListFuture = _getLatestFirmwares();
   }
 
   @override
@@ -75,7 +76,26 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     _firmwarePathController.dispose();
   }
 
-  Future<List<_FirmwareEntry>> getLatestFirmwares() async {
+  Future<void> _parseJsonMetadata(List<_FirmwareEntry> firmwaresList,
+      ArchiveFile jsonArchive, String zipUrl) async {
+    final metadata = jsonDecode(utf8.decode(jsonArchive.content));
+    final list = List<_FirmwareEntry>.empty(growable: true);
+    for (String firmwareFile in metadata['contents'].keys) {
+      if (firmwareFile.contains('.hex')) continue;
+      final firmwareInfo = metadata['contents'][firmwareFile];
+      list.add(
+        _FirmwareEntry(
+            "IronOS ${metadata['release']} - ${firmwareInfo['language_name']}",
+            firmwareFile,
+            zipUrl),
+      );
+    }
+    list.sort((a, b) => a.fileName.compareTo(b.fileName));
+    firmwaresList.addAll(list);
+  }
+
+  Future<List<_FirmwareEntry>> _getLatestFirmwares() async {
+    final list = List<_FirmwareEntry>.empty(growable: true);
     try {
       final githubResponse = await _dio
           .get("https://api.github.com/repos/Ralim/IronOS/releases/latest");
@@ -83,16 +103,23 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
         throw "Failed to fetch Github releases";
       }
       List<dynamic> assets = githubResponse.data['assets'];
-      _pinecilZipUrl = assets.singleWhere((element) =>
+      final pinecilZipUrl = assets.singleWhere((element) =>
           element['name'] == 'Pinecil.zip')?['browser_download_url'];
+      final pinecilMultilangZipUrl = assets.singleWhere((element) =>
+          element['name'] == 'Pinecil_multi-lang.zip')?['browser_download_url'];
       final metadata =
           assets.singleWhere((element) => element['name'] == "metadata.zip");
       final metadataRequest = await _dio.get(metadata['browser_download_url'],
           options: Options(responseType: ResponseType.bytes));
       final metadataZip = ZipDecoder().decodeBytes(metadataRequest.data);
+      final pinecilMultilangJsonFile = metadataZip
+          .singleWhere((element) => element.name == "Pinecil_multi-lang.json");
+      await _parseJsonMetadata(
+          list, pinecilMultilangJsonFile, pinecilMultilangZipUrl);
       final pinecilJsonFile =
           metadataZip.singleWhere((element) => element.name == "Pinecil.json");
-      final pinecilMetadata = jsonDecode(utf8.decode(pinecilJsonFile.content));
+      await _parseJsonMetadata(list, pinecilJsonFile, pinecilZipUrl);
+      /*final pinecilMetadata = jsonDecode(utf8.decode(pinecilJsonFile.content));
       return List<_FirmwareEntry>.generate(
           pinecilMetadata['contents'].keys.length, (index) {
         final firmwareFile = pinecilMetadata['contents'].keys.toList()[index];
@@ -100,21 +127,20 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
         return _FirmwareEntry(
             "IronOS ${pinecilMetadata['release']} - ${firmwareInfo['language_name']}",
             firmwareFile);
-      });
+      });*/
     } catch (ex) {
       print(ex);
     }
-    return List<_FirmwareEntry>.empty();
+    return list;
   }
 
-  void updatePinecilStatus(Timer timer) {
+  void _updatePinecilStatus(Timer timer) {
     final devicesList = libUSB.getDevicesList();
     if (_previousDevicesCount != devicesList.devices.length) {
       _previousDevicesCount = devicesList.devices.length;
       _pinecilState = _PinecilState.Disconnected;
       for (var device in devicesList.devices) {
         var descriptor = libUSB.getDeviceDescriptor(device);
-        print(descriptor.idVendor.toRadixString(16) + " / " + descriptor.idProduct.toRadixString(16));
         if (descriptor.idVendor == 0x28E9 && descriptor.idProduct == 0x0189) {
           try {
             final deviceHandle = libUSB.open(device);
@@ -141,7 +167,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     devicesList.free();
   }
 
-  void copyLog() {
+  void _copyLog() {
     String logData = _log.map((e) => e.message).join('\n');
     FlutterClipboard.copy(logData);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -149,11 +175,12 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     ));
   }
 
-  void flashFirmware({String? firmwarePath, String? firmwareURL}) async {
+  void _flashFirmware(
+      {String? firmwarePath, _FirmwareEntry? firmwareEntry}) async {
     String filePath = "";
 
     // region Custom Firmware Check
-    if (firmwareURL == null) {
+    if (firmwareEntry == null) {
       if (firmwarePath == null) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("You need to specify custom firmware path"),
@@ -204,14 +231,15 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     stderr.addStream(dfuUtil.stderr); */
 
     // region Download Firmware
-    if (firmwareURL != null) {
+    if (firmwareEntry != null) {
       setState(() {
         _state = "Downloading firmware... 0%";
-        _log.add(_LogMessage("Downloading firmware " + firmwareURL, false));
+        _log.add(_LogMessage(
+            "Downloading firmware " + firmwareEntry.fileName, false));
       });
       try {
         final firmwaresZipResponse = await _dio.get(
-          _pinecilZipUrl!,
+          firmwareEntry.zipUrl,
           onReceiveProgress: (count, total) => setState(() {
             _state =
                 "Downloading firmware... ${((count / total) * 100.0).round()}%";
@@ -223,7 +251,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
             ZipDecoder().decodeBytes(firmwaresZipResponse.data);
 
         final firmwareZipFile = firmwaresZip.files
-            .singleWhere((element) => element.name == firmwareURL);
+            .singleWhere((element) => element.name == firmwareEntry.fileName);
         final firmwareFile = File("$currentWorkingDirectory/_tmpfirm.dfu");
         await firmwareFile.create(recursive: true);
         await firmwareFile.writeAsBytes(firmwareZipFile.content);
@@ -324,7 +352,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     });
   }
 
-  Step connectStep(BuildContext context) {
+  Step _connectStep(BuildContext context) {
     return Step(
       isActive: _currentStep == 0,
       state: _currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -350,7 +378,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     );
   }
 
-  Step selectFirmwareStep(BuildContext context) {
+  Step _selectFirmwareStep(BuildContext context) {
     return Step(
       isActive: _currentStep == 1,
       state: _currentStep > 1 ? StepState.complete : StepState.indexed,
@@ -365,26 +393,26 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
                 return Row(
                   children: [
                     Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _firmwareType,
+                      child: DropdownButtonFormField<_FirmwareEntry?>(
+                        value: _firmwareToFlash,
                         isDense: true,
                         items: [
-                          const DropdownMenuItem<String>(
+                          const DropdownMenuItem<_FirmwareEntry?>(
                             child: Text("Custom"),
                             value: null,
                           ),
                           if (snapshot.hasData)
                             ...snapshot.data!
-                                .map<DropdownMenuItem<String>>(
-                                  (e) => DropdownMenuItem<String>(
+                                .map<DropdownMenuItem<_FirmwareEntry?>>(
+                                  (e) => DropdownMenuItem<_FirmwareEntry?>(
                                     child: Text(e.name),
-                                    value: e.url,
+                                    value: e,
                                   ),
                                 )
                                 .toList()
                         ],
                         onChanged: (item) =>
-                            setState(() => _firmwareType = item),
+                            setState(() => _firmwareToFlash = item),
                         decoration:
                             const InputDecoration(labelText: 'Firmware Type'),
                       ),
@@ -408,7 +436,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
             children: [
               Flexible(
                 child: TextField(
-                  enabled: _firmwareType == null,
+                  enabled: _firmwareToFlash == null,
                   controller: _firmwarePathController,
                   decoration:
                       const InputDecoration(labelText: 'Path to the firmware'),
@@ -416,7 +444,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
               ),
               const SizedBox(width: 8),
               ElevatedButton(
-                onPressed: _firmwareType == null
+                onPressed: _firmwareToFlash == null
                     ? () async {
                         var result = await FilePicker.platform.pickFiles(
                             type: FileType.custom,
@@ -435,9 +463,9 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
           ),
           const SizedBox(height: 18),
           ElevatedButton(
-            onPressed: () => flashFirmware(
+            onPressed: () => _flashFirmware(
               firmwarePath: _firmwarePathController.text,
-              firmwareURL: _firmwareType,
+              firmwareEntry: _firmwareToFlash,
             ),
             child: const Text('Update'),
           ),
@@ -446,7 +474,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     );
   }
 
-  Step updateStep(BuildContext context) {
+  Step _updateStep(BuildContext context) {
     return Step(
       isActive: _currentStep == 2,
       state: _currentStep > 2 ? StepState.complete : StepState.indexed,
@@ -479,7 +507,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
                 headerBuilder: (context, isExpanded) => ListTile(
                   title: Text('Log'),
                   trailing: IconButton(
-                    onPressed: copyLog,
+                    onPressed: _copyLog,
                     icon: Icon(Icons.copy),
                     tooltip: 'Copy log to clipboard',
                   ),
@@ -515,7 +543,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     );
   }
 
-  Step unplugStep(BuildContext context) {
+  Step _unplugStep(BuildContext context) {
     return Step(
       isActive: _currentStep == 3,
       title: const Text('Unplug'),
@@ -524,7 +552,8 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     );
   }
 
-  Widget stepperControlsBuilder(BuildContext context, ControlsDetails details) {
+  Widget _stepperControlsBuilder(
+      BuildContext context, ControlsDetails details) {
     if (details.currentStep == 0) {
       if (_pinecilState == _PinecilState.Error) {
         return const Text(
@@ -545,12 +574,12 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
             ? StepperType.vertical
             : StepperType.horizontal,
         currentStep: _currentStep,
-        controlsBuilder: stepperControlsBuilder,
+        controlsBuilder: _stepperControlsBuilder,
         steps: [
-          connectStep(context),
-          selectFirmwareStep(context),
-          updateStep(context),
-          unplugStep(context)
+          _connectStep(context),
+          _selectFirmwareStep(context),
+          _updateStep(context),
+          _unplugStep(context)
         ],
       ),
     );
