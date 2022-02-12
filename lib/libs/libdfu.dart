@@ -48,8 +48,8 @@ class _LibDFU {
 
   _LibDFU() {
     if (Platform.isWindows) {
-      _dyLib = DynamicLibrary.open('${currentWorkingDirectory}/libdfu-util.dll');
-    } else if(Platform.isMacOS) {
+      _dyLib = DynamicLibrary.open('${currentWorkingDirectory}/dfu-util.dll');
+    } else if (Platform.isMacOS) {
       _dyLib = DynamicLibrary.open('libdfu-util.1.0.dylib');
     }
     _set_download = _dyLib
@@ -126,7 +126,6 @@ class _LibDFU {
 
   void init() {
     if (_init_dart(NativeApi.initializeApiDLData) == 0) {
-      print("cDamn");
       throw "Failed to initialize Dart API for DFU Util";
     }
   }
