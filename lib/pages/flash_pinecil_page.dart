@@ -568,6 +568,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pinecil Update'),
+        automaticallyImplyLeading: _currentStep != 2,
       ),
       body: Stepper(
         type: MediaQuery.of(context).size.shortestSide < 600
