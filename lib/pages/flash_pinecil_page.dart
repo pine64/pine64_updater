@@ -363,13 +363,13 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
         children: [
           const Text('Instructions:'),
           const Text(
-              '0. Step: Make sure that you do not have a barrel jack PSU plugged in'),
+              '0. Step: check that you do not have DC barrel jack PSU connected.'),
           const Text(
-              '1. Step: Hold the minus button (closer to power connector)'),
-          const Text('2. Step: Connect Pinecil via USB-C connector'),
-          const Text('3. Step: Release minus button'),
+              '1. Step: hold down the minus (-)  (button closer to usb-c side).'),
+          const Text('2. Step: plug usb-c cable into Pinecil & PC (do not release (-) button).'),
+          const Text('3. Step: wait about 10 seconds until Pinecil launches to DFU mode.'),
           const Text(
-              '4. Step: Wait approx. 10 seconds until Pinecil will launch to DFU mode.'),
+              '4. Step: release the minus (-) button.'),
           Center(
             child: Image.asset("assets/images/pinecil_flashing.png"),
           ),
