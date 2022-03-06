@@ -57,8 +57,8 @@ class LibUSBDeviceDescriptor {
   final int idProduct;
 
   LibUSBDeviceDescriptor.fromStruct(_LibUSBDeviceDescriptor struct)
-    : idVendor = struct.idVendor,
-      idProduct = struct.idProduct;
+      : idVendor = struct.idVendor,
+        idProduct = struct.idProduct;
 }
 
 class LibUSBDeviceList {
@@ -120,7 +120,7 @@ class _LibUSB {
   bool _initialized = false;
   bool get initialized => _initialized;
 
-  _LibUSB() {
+  void init() {
     if (Platform.isWindows) {
       _dyLib = DynamicLibrary.open('${Directory.current.path}/libusb-1.0.dll');
     } else if (Platform.isMacOS) {
@@ -147,9 +147,7 @@ class _LibUSB {
     _close = _dyLib
         .lookup<NativeFunction<_libusb_close_t>>('libusb_close')
         .asFunction();
-  }
 
-  void init() {
     Pointer<Pointer<_LibUSBContext>> ctx = calloc();
     int err = _init(ctx);
     _context = ctx.value;

@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../libs/libdfu.dart';
+import '../libs/libusb.dart';
 import '../main.dart';
 
 class _DeviceCard extends StatelessWidget {
@@ -58,41 +63,83 @@ class _PickDevicePageState extends State<PickDevicePage> {
           "https://api.github.com/repos/pine64/pine64_updater/releases/latest");
       if (latestReleaseInfo.data['tag_name'] != packageInfo.version) {
         showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text('New update available!'),
-                content: Text('Do you want redirect to download page?'),
-                actions: <Widget>[
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        launch(
-                            "https://github.com/pine64/pine64_updater/releases/latest");
-                      },
-                      child: Text('Yes')),
-                  TextButton(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('New update available!'),
+              content: Text('Do you want redirect to download page?'),
+              actions: <Widget>[
+                TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
+                      launch(
+                          "https://github.com/pine64/pine64_updater/releases/latest");
                     },
-                    child: Text('No'),
-                  )
-                ],
-              );
-            });
+                    child: Text('Yes')),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('No'),
+                )
+              ],
+            );
+          },
+        );
       }
     } catch (ex) {
       print(ex);
     }
   }
 
+  void _initNativeLibraries(BuildContext context) {
+    try {
+      libUSB.init();
+      libDFU.init();
+    } catch (ex) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Application failed to initialize.'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                    'Application failed to initialize native libraries. Please report this on Github.'),
+                SelectableText('Error: $ex')
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  exit(0);
+                },
+                child: const Text('Close App'),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      if (!libUSB.initialized) {
+        _initNativeLibraries(context);
+      }
+      if (!_checkedForUpdates) {
+        _checkedForUpdates = true;
+        _checkForUpdates(context);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (!_checkedForUpdates) {
-      _checkedForUpdates = true;
-      _checkForUpdates(context);
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pick a device to update'),

@@ -11,8 +11,6 @@ import 'pages/pick_device_page.dart';
 
 void main() async {
   currentWorkingDirectory = Directory.current.path;
-  libUSB.init();
-  libDFU.init();
   runApp(const Pine64UpdaterApp());
   packageInfo = await PackageInfo.fromPlatform();
 }

@@ -46,50 +46,6 @@ class _LibDFU {
   void Function(String status, int progress)? _onProgressCallback = null;
   ReceivePort? _receivePort = null;
 
-  _LibDFU() {
-    if (Platform.isWindows) {
-      _dyLib = DynamicLibrary.open('${currentWorkingDirectory}/dfu-util.dll');
-    } else if (Platform.isMacOS) {
-      _dyLib = DynamicLibrary.open('libdfu-util.1.0.dylib');
-    }
-    _set_download = _dyLib
-        .lookup<NativeFunction<_libdfu_set_download_t>>('libdfu_set_download')
-        .asFunction();
-    _set_altsetting = _dyLib
-        .lookup<NativeFunction<_libdfu_set_altsetting_t>>(
-            'libdfu_set_altsetting')
-        .asFunction();
-    _set_vendprod = _dyLib
-        .lookup<NativeFunction<_libdfu_set_vendprod_t>>('libdfu_set_vendprod')
-        .asFunction();
-    _set_dfuse_options = _dyLib
-        .lookup<NativeFunction<_libdfu_set_dfuse_options_t>>(
-            'libdfu_set_dfuse_options')
-        .asFunction();
-    _execute = _dyLib
-        .lookup<NativeFunction<_libdfu_execute_t>>('libdfu_execute')
-        .asFunction();
-    _execute_dart = _dyLib
-        .lookup<NativeFunction<_libdfu_execute_dart_t>>('libdfu_execute_dart')
-        .asFunction();
-    _init_dart = _dyLib
-        .lookup<NativeFunction<_libdfu_init_dart_t>>('libdfu_init_dart')
-        .asFunction();
-
-    /*_set_stderr_callback = _dyLib
-        .lookup<NativeFunction<_libdfu_set_stderr_callback_t>>(
-            'libdfu_set_stderr_callback')
-        .asFunction();
-    _set_stdout_callback = _dyLib
-        .lookup<NativeFunction<_libdfu_set_stdout_callback_t>>(
-            'libdfu_set_stdout_callback')
-        .asFunction();
-    _set_progress_callback = _dyLib
-        .lookup<NativeFunction<_libdfu_set_progress_callback_t>>(
-            'libdfu_set_progress_callback')
-        .asFunction();*/
-  }
-
   void setDownload(String fileName) {
     _set_download(fileName.toNativeUtf8());
   }
@@ -125,6 +81,47 @@ class _LibDFU {
   }*/
 
   void init() {
+    if (Platform.isWindows) {
+      _dyLib = DynamicLibrary.open('${currentWorkingDirectory}/dfu-util.dll');
+    } else if (Platform.isMacOS) {
+      _dyLib = DynamicLibrary.open('libdfu-util.1.0.dylib');
+    }
+    _set_download = _dyLib
+        .lookup<NativeFunction<_libdfu_set_download_t>>('libdfu_set_download')
+        .asFunction();
+    _set_altsetting = _dyLib
+        .lookup<NativeFunction<_libdfu_set_altsetting_t>>(
+            'libdfu_set_altsetting')
+        .asFunction();
+    _set_vendprod = _dyLib
+        .lookup<NativeFunction<_libdfu_set_vendprod_t>>('libdfu_set_vendprod')
+        .asFunction();
+    _set_dfuse_options = _dyLib
+        .lookup<NativeFunction<_libdfu_set_dfuse_options_t>>(
+            'libdfu_set_dfuse_options')
+        .asFunction();
+    _execute = _dyLib
+        .lookup<NativeFunction<_libdfu_execute_t>>('libdfu_execute')
+        .asFunction();
+    _execute_dart = _dyLib
+        .lookup<NativeFunction<_libdfu_execute_dart_t>>('libdfu_execute_dart')
+        .asFunction();
+    _init_dart = _dyLib
+        .lookup<NativeFunction<_libdfu_init_dart_t>>('libdfu_init_dart')
+        .asFunction();
+    /*_set_stderr_callback = _dyLib
+        .lookup<NativeFunction<_libdfu_set_stderr_callback_t>>(
+            'libdfu_set_stderr_callback')
+        .asFunction();
+    _set_stdout_callback = _dyLib
+        .lookup<NativeFunction<_libdfu_set_stdout_callback_t>>(
+            'libdfu_set_stdout_callback')
+        .asFunction();
+    _set_progress_callback = _dyLib
+        .lookup<NativeFunction<_libdfu_set_progress_callback_t>>(
+            'libdfu_set_progress_callback')
+        .asFunction();*/
+
     if (_init_dart(NativeApi.initializeApiDLData) == 0) {
       throw "Failed to initialize Dart API for DFU Util";
     }
