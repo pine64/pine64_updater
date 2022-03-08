@@ -43,7 +43,7 @@ jobs:
       - name: Download libdfu-util, libusb and zadic
         run: |
           cd build\windows\runner\Release\
-          curl https://github.com/gamelaster/dfu-util/releases/download/0.2/libdfu_util_win64_0.2.zip --output libs.zip -L
+          curl https://github.com/gamelaster/dfu-util/releases/download/0.3/libdfu_util_win64_0.3.zip --output libs.zip -L
           unzip libs.zip
           rm -rf libs.zip
           curl https://gami.ee/files/zadic.exe --output zadic.exe -L
@@ -72,7 +72,7 @@ jobs:
       - name: Download libdfu-util and libusb
         run: |
           cd macos
-          wget -O libs.zip https://github.com/gamelaster/dfu-util/releases/download/0.2/libdfu_util_macos64_0.2.zip
+          wget -O libs.zip https://github.com/gamelaster/dfu-util/releases/download/0.3/libdfu_util_macos64_0.3.zip
           unzip libs.zip
           rm -rf libs.zip
 
