@@ -365,7 +365,7 @@ class _FlashPinecilPageState extends State<FlashPinecilPage> {
           const Text(
               '0. Step: Check that you do not have DC barrel jack connected.'),
           const Text(
-              '1. Step: Hold down the minus (-) button (closer to usb-c side).'),
+              '1. Step: Hold down the minus (-) button (closer to USB-C side).'),
           const Text(
               '2. Step: Plug USB-C cable into Pinecil & PC (do not release (-) button).'),
           const Text(
