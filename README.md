@@ -4,7 +4,8 @@ Application for updating PINE64 devices, such as Pinecil.
 
 # Supported devices
 
-- [X] Pinecil
+- [X] Pinecil V1
+- [ ] Pinecil V2
 - [ ] PinePhone
 - [ ] PinePhone Pro
 
@@ -18,7 +19,7 @@ Application for updating PINE64 devices, such as Pinecil.
 
 # How to download & install
 
-Download the binaries from the [releases page](https://github.com/pine64/pine64_updater/releases).
+Download the newest binaries from the [releases page](https://github.com/pine64/pine64_updater/releases).
 
 # Compilation instructions
 
