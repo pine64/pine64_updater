@@ -1,3 +1,5 @@
+<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pine64/pine64_updater/total">
+
 # PINE64 Updater
 
 Application for updating PINE64 devices, such as Pinecil.
