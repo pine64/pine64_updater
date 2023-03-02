@@ -1,4 +1,7 @@
-<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pine64/pine64_updater/total">   ![Discord](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=plastic)
+![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total)
+![Discord](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=brightgreen)
+
 # PINE64 Updater
 
 Application for updating PINE64 devices, such as Pinecil.
