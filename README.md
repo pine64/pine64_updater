@@ -1,3 +1,4 @@
+<img alt="GitHub all releases" src="https://img.shields.io/github/downloads/pine64/pine64_updater/total">   ![Discord](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=plastic)
 # PINE64 Updater
 
 Application for updating PINE64 devices, such as Pinecil.
@@ -20,8 +21,11 @@ Application for updating PINE64 devices, such as Pinecil.
 # How to download & install
 
 - [Download the newest binaries from the releases page here.](https://github.com/pine64/pine64_updater/releases)
-- Currently works for Pinecil V1 sold by Pine64 before August 2, 2022 and uses DFU for firmware.
-- Pinecil V2 models have a new Bouffalo BL706 chip which requires a different flashing method. This is being worked on by community volunteers and a flashing method will be published on Ralim's IronOS when there is an update for V2. Factory installed 2.18 is the current freshest version.
+- Works for original Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
+- Does not work for any authentic Pine64 Pinecils sold after Aug. 1, 2022 because Pine64 switched to a new MCU chip.
+- Newer Pinecil V2 models require a different flasher because of the new MCU chip (BL706 with BLE bluetooth). Pinecil V2 and other [Bouffalo flashers are here](https://github.com/pine64/blisp).
+- [Pinecil Wiki](https://wiki.pine64.org/wiki/Pinecil) page has many details on V1/V2 with links to the [Live Community Chat channels](https://wiki.pine64.org/wiki/Pinecil#Live_Community_Chat). Firmware instructions are also on Pinecil Wiki.
+
 
 # Compilation instructions
 
