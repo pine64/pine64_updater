@@ -1,5 +1,5 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total?color=blue)
-![Discord chat](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat&color=blue)
+[![Discord chat](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat&color=blue)](https://discord.gg/pine64)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=blue)
 
 # PINE64 Updater
@@ -17,7 +17,8 @@ Application for updating PINE64 devices, such as Pinecil.
 
 ## 🖥️ Install Options
 
-- Download the newest Windows or Mac binaries from the [releases page here.](https://github.com/pine64/pine64_updater/releases)
+- Download the newest Windows or Mac binaries from the [releases here](https://github.com/pine64/pine64_updater/releases).
+- Windows: use `PINE64.Updater.Windows.3.zip` (for all 32/64) [reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531).
 - Works for [original](https://wiki.pine64.org/wiki/Pinecil#Authenticity) Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
 
 
