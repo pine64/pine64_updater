@@ -21,9 +21,9 @@ Application for updating PINE64 devices, such as Pinecil.
 - Works for original Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
 - If you have Linux, try [PineFlash here](https://github.com/River-Mochi/PineFlash)
 
-# Notes
-- Does not work for any Pine64 Pinecils sold after Aug. 1, 2022 because Pine64 switched to a new MCU chip that needs BLISP flasher
-- Pinecil V2 models require a different flasher because of the new MCU chip (BL706 with BLE bluetooth). Pinecil V2 [Bouffalo flashers are here](https://github.com/pine64/blisp).
+# 🔖 Notes
+- Does not work for any Pine64 Pinecils sold after Aug. 1, 2022 because Pine64 switched to a new MCU chip that needs BLISP flasher.
+- Newer Pinecils require a different flasher because of the new BL706 MCU chip with BLE bluetooth. Pinecil V2 [BLISP flasher is here](https://github.com/pine64/blisp).
 
 # 📖 References
 - [Pinecil Wiki](https://wiki.pine64.org/wiki/Pinecil) has many details on V1/V2 with links to the [Live Community Chat channels](https://wiki.pine64.org/wiki/Pinecil#Live_Community_Chat). Firmware instructions are also on Pinecil Wiki.
