@@ -1,6 +1,6 @@
-![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total)
-![Discord](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=brightgreen)
+![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total?color=blue)
+![Discord chat](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat&color=blue)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=blue)
 
 # PINE64 Updater
 
@@ -15,20 +15,22 @@ Application for updating PINE64 devices, such as Pinecil.
 
 
 
-# 🖥️ Install Options
+## 🖥️ Install Options
 
 - Download the newest Windows or Mac binaries from the [releases page here.](https://github.com/pine64/pine64_updater/releases)
-- Works for original Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
-- If you have Linux, try [PineFlash here](https://github.com/River-Mochi/PineFlash)
+- Works for [original](https://wiki.pine64.org/wiki/Pinecil#Authenticity) Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
 
-# 🔖 Notes
+
+## 🔖 Notes
+- If you have Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash)
 - Does not work for any Pine64 Pinecils sold after Aug. 1, 2022 because Pine64 switched to a new MCU chip that needs BLISP flasher.
-- Newer Pinecils require a different flasher because of the new BL706 MCU chip with BLE bluetooth. Pinecil V2 [BLISP flasher is here](https://github.com/pine64/blisp).
+- New Pinecils require [Blisp flasher here](https://github.com/pine64/blisp) because they have a BL706 MCU chip with BLE bluetooth.
 
-# 📖 References
-- [Pinecil Wiki](https://wiki.pine64.org/wiki/Pinecil) has many details on V1/V2 with links to the [Live Community Chat channels](https://wiki.pine64.org/wiki/Pinecil#Live_Community_Chat). Firmware instructions are also on Pinecil Wiki.
+## 📖 References
+- [Pinecil Wiki](https://wiki.pine64.org/wiki/Pinecil) has the Firmware instructions and many details on Pinecil.
+- Links to the live pinecil community [chat here](https://wiki.pine64.org/wiki/Pinecil#Live_Community_Chat). 
 
 
-# Compilation instructions
+## :hammer_and_wrench: Compile instructions
 
 To be done...
