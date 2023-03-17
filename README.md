@@ -1,10 +1,15 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total?color=blue)
 [![Discord chat](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat&color=blue)](https://discord.gg/pine64)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=blue)
+<br clear="both">
 
-# PINE64 Updater
+<img src="https://user-images.githubusercontent.com/97197236/225784120-09c7e266-69d8-436c-9cf0-78b3745444e7.png" align="left" width="60" > <br clear="right" />
+
+## PINE64 Updater
 
 Application for updating PINE64 devices, such as Pinecil.
+
+<br clear="left">
 
 ## Supported Devices 
  | System  | Windows | MacOS| Linux| Android |
