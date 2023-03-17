@@ -11,19 +11,16 @@ Application for updating PINE64 devices, such as Pinecil.
  | :-----: | :-----: | :--: | :--: | :-----: |
  | Pinecil V1  |:heavy_check_mark:|:heavy_check_mark:|    |   |
  | Pinecil V2  |     |     |       |
-<br>
-
-
+ <br>
 
 ## 🖥️ Install Options
-
-- Download the newest Windows or Mac binaries from the [releases here](https://github.com/pine64/pine64_updater/releases).
-- Windows: use `PINE64.Updater.Windows.3.zip` (for all 32/64) [reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531).
-- Works for [original](https://wiki.pine64.org/wiki/Pinecil#Authenticity) Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
-
+:window: Windows download `PINE64.Updater.Windows.3.zip` (for all 32 or 64) from [releases here](https://github.com/pine64/pine64_updater/releases). ([reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531))  
+🍏 MacOS download `pine64_updater_macos64_1.0.3.dmg` from [releases here](https://github.com/pine64/pine64_updater/releases).
+<br><br>
 
 ## 🔖 Notes
 - If you have Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash)
+- Works for [original](https://wiki.pine64.org/wiki/Pinecil#Authenticity) Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
 - Does not work for any Pine64 Pinecils sold after Aug. 1, 2022 because Pine64 switched to a new MCU chip that needs BLISP flasher.
 - New Pinecils require [Blisp flasher here](https://github.com/pine64/blisp) because they have a BL706 MCU chip with BLE bluetooth.
 
@@ -32,6 +29,6 @@ Application for updating PINE64 devices, such as Pinecil.
 - Links to the live pinecil community [chat here](https://wiki.pine64.org/wiki/Pinecil#Live_Community_Chat). 
 
 
-## :hammer_and_wrench: Compile instructions
+### :hammer_and_wrench: Compile instructions
 
 To be done...
