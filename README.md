@@ -1,35 +1,38 @@
-![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total)
-![Discord](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=brightgreen)
+![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total?color=5791ac)
+[![Discord chat](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat&color=5791ac)](https://discord.gg/pine64)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=5791ac)
+<br clear="both">
 
-# PINE64 Updater
+<img src="https://user-images.githubusercontent.com/97197236/225784120-09c7e266-69d8-436c-9cf0-78b3745444e7.png" align="left" width="50" > <br clear="right" />
+## PINE64 Updater
 
 Application for updating PINE64 devices, such as Pinecil.
 
-# Supported devices
+<br clear="left">
 
-- [X] Pinecil V1
-- [ ] Pinecil V2
-- [ ] PinePhone
-- [ ] PinePhone Pro
+## Supported Devices 
+ | System  | Windows | MacOS| Linux| Android |
+ | :-----: | :-----: | :--: | :--: | :-----: |
+ | Pinecil V1  |:heavy_check_mark:|:heavy_check_mark:|    |   |
+ | Pinecil V2  |     |     |       |
+ <br>
 
-# Supported platforms
+## 🖥️ Install Options
+:window: Windows download `PINE64.Updater.Windows.3.zip` (for all 32 or 64) from [releases here](https://github.com/pine64/pine64_updater/releases). ([reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531))  
+🍏 MacOS download `pine64_updater_macos64_1.0.3.dmg` from [releases here](https://github.com/pine64/pine64_updater/releases).
+<br><br>
 
-- [X] Windows
-- [X] MacOS
-- [ ] Linux
-- [ ] Android
-- [ ] Web
+## 🔖 Notes
+- If you have Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash)
+- Works for [original](https://wiki.pine64.org/wiki/Pinecil#Authenticity) Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
+- Does not work for any Pine64 Pinecils sold after Aug. 1, 2022 because Pine64 switched to a new MCU chip that needs BLISP flasher.
+- New Pinecils require [Blisp flasher here](https://github.com/pine64/blisp) because they have a BL706 MCU chip with BLE bluetooth.
 
-# How to download & install
-
-- [Download the newest binaries from the releases page here.](https://github.com/pine64/pine64_updater/releases)
-- Works for original Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
-- Does not work for any authentic Pine64 Pinecils sold after Aug. 1, 2022 because Pine64 switched to a new MCU chip.
-- Newer Pinecil V2 models require a different flasher because of the new MCU chip (BL706 with BLE bluetooth). Pinecil V2 and other [Bouffalo flashers are here](https://github.com/pine64/blisp).
-- [Pinecil Wiki](https://wiki.pine64.org/wiki/Pinecil) page has many details on V1/V2 with links to the [Live Community Chat channels](https://wiki.pine64.org/wiki/Pinecil#Live_Community_Chat). Firmware instructions are also on Pinecil Wiki.
+## 📖 References
+- [Pinecil Wiki](https://wiki.pine64.org/wiki/Pinecil) has the Firmware instructions and many details on Pinecil.
+- Links to the live pinecil community [chat here](https://wiki.pine64.org/wiki/Pinecil#Live_Community_Chat). 
 
 
-# Compilation instructions
+### :hammer_and_wrench: Compile instructions
 
 To be done...
