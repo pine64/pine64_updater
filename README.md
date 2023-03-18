@@ -18,10 +18,13 @@ Application for updating PINE64 devices, such as Pinecil.
  <br>
 
 ## 🖥️ Install Options
-:window: Windows download `PINE64.Updater.Windows.3.zip` (for all x32 or x64) from [releases here](https://github.com/pine64/pine64_updater/releases) ([reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531)).  
-🍏 MacOS download `pine64_updater_macos64_1.0.3.dmg` from [releases here](https://github.com/pine64/pine64_updater/releases).  
-:penguin: If you have Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash).
+
+<img width="19" src="https://cdn.simpleicons.org/Windows11/000000" /> &nbsp; Windows download `PINE64.Updater.Windows.3.zip` (for all x32 or x64) from [releases here](https://github.com/pine64/pine64_updater/releases) ([reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531)).  
+<img width="20" src="https://cdn.simpleicons.org/Apple" /> &nbsp; MacOS download `pine64_updater_macos64_1.0.3.dmg` from [releases here](https://github.com/pine64/pine64_updater/releases).  
+<img width="20" src="https://cdn.simpleicons.org/Linux/000000" /> &nbsp; For Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash).
 <br><br>
+
+ <a href="#">
 
 ## 🔖 Notes
 - Works for [original](https://wiki.pine64.org/wiki/Pinecil#Authenticity) Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
