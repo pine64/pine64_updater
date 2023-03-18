@@ -10,8 +10,10 @@ Application for updating PINE64 devices, such as Pinecil.
 
 <br clear="left">
 
+#000000
+
 ## Supported Devices 
- | System  | Windows | MacOS| Linux| Android |
+ | System  | <img width="15" src="https://cdn.simpleicons.org/Windows11/000000" /> Windows | <img width="15" src="https://cdn.simpleicons.org/Apple" /> MacOS| <img width="17" src="https://cdn.simpleicons.org/Linux/000000" /> Linux| <img width="15" src="https://cdn.simpleicons.org/Android/000000" /> Android |
  | :-----: | :-----: | :--: | :--: | :-----: |
  | Pinecil V1  |:heavy_check_mark:|:heavy_check_mark:|    |   |
  | Pinecil V2  |     |     |       |
