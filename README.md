@@ -3,7 +3,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=5791ac)](https://github.com/pine64/pine64_updater/releases/tag/1.0.3)
 <br clear="both">
 
-<img src="https://user-images.githubusercontent.com/97197236/225784120-09c7e266-69d8-436c-9cf0-78b3745444e7.png" align="left" width="50" > <br clear="right" />
+<img src="./assets/img/Gradient-white-blue-03.png" align="left" width="55" ><br clear="left" />
 ## PINE64 Updater
 
 Application for updating PINE64 devices, such as Pinecil.
