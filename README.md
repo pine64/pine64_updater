@@ -1,27 +1,29 @@
-![GitHub all releases](https://img.shields.io/github/downloads/pine64/pine64_updater/total?color=5791ac)
+[![GitHub all downloads](https://img.shields.io/github/downloads/pine64/pine64_updater/total?color=5791ac&logo=docusign&logoColor=white)](https://github.com/pine64/pine64_updater/releases/tag/1.0.3)
 [![Discord chat](https://img.shields.io/discord/463237927984693259?label=pine64_chat&style=flat&color=5791ac)](https://discord.gg/pine64)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=5791ac)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/pine64/pine64_updater?color=5791ac)](https://github.com/pine64/pine64_updater/releases/tag/1.0.3)
 <br clear="both">
 
-<img src="https://user-images.githubusercontent.com/97197236/225784120-09c7e266-69d8-436c-9cf0-78b3745444e7.png" align="left" width="50" > <br clear="right" />
+<img src="./assets/img/Gradient-white-blue-03.png" align="left" width="55" ><br clear="left" />
 ## PINE64 Updater
 
 Application for updating PINE64 devices, such as Pinecil.
-
 <br clear="left">
 
-## Supported Devices 
- | System  | Windows | MacOS| Linux| Android |
- | :-----: | :-----: | :--: | :--: | :-----: |
- | Pinecil V1  |:heavy_check_mark:|:heavy_check_mark:|    |   |
- | Pinecil V2  |     |     |       |
+### Supported Devices 
+ | System  | <img width="15" src="https://cdn.simpleicons.org/Windows11/000000" /> Windows | <img width="15" src="https://cdn.simpleicons.org/Apple" /> MacOS| <img width="17" src="https://cdn.simpleicons.org/Linux/000000" /> Linux|
+ | :-----: | :-----: | :-----: | :-----: |
+ | Pinecil V1  |<img width="18" src="https://cdn.simpleicons.org/cachet/5791ac" />|<img width="18" src="https://cdn.simpleicons.org/cachet/5791ac" />|    |
+ | Pinecil V2  |     |     |     |
  <br>
 
 ## 🖥️ Install Options
-:window: Windows download `PINE64.Updater.Windows.3.zip` (for all x32 or x64) from [releases here](https://github.com/pine64/pine64_updater/releases) ([reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531)).  
-🍏 MacOS download `pine64_updater_macos64_1.0.3.dmg` from [releases here](https://github.com/pine64/pine64_updater/releases).  
-:penguin: If you have Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash).
+
+<img width="19" src="https://cdn.simpleicons.org/Windows11/000000" /> &nbsp; Windows download `PINE64.Updater.Windows.3.zip` (for all x32 or x64) from [releases here](https://github.com/pine64/pine64_updater/releases) ([reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531)).  
+<img width="20" src="https://cdn.simpleicons.org/Apple" /> &nbsp; MacOS download `pine64_updater_macos64_1.0.3.dmg` from [releases here](https://github.com/pine64/pine64_updater/releases).  
+<img width="20" src="https://cdn.simpleicons.org/Linux/000000" /> &nbsp; For Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash).
 <br><br>
+
+ <a href="#">
 
 ## 🔖 Notes
 - Works for [original](https://wiki.pine64.org/wiki/Pinecil#Authenticity) Pinecil V1 sold by Pine64 before August 2022 and uses DFU for firmware.
