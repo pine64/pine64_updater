@@ -20,7 +20,7 @@ Application for updating PINE64 devices, such as Pinecil.
 
 <img width="19" src="https://cdn.simpleicons.org/Windows11/5791ac" /> &nbsp; Windows download `PINE64.Updater.Windows.3.zip` (for all x32 or x64) from [releases here](https://github.com/pine64/pine64_updater/releases) ([reference](https://github.com/pine64/pine64_updater/issues/41#issuecomment-1159680531)).  
 <img width="20" src="https://cdn.simpleicons.org/Apple/5791ac" /> &nbsp; MacOS download `pine64_updater_macos64_1.0.3.dmg` from [releases here](https://github.com/pine64/pine64_updater/releases).  
-<img width="20" src="https://cdn.simpleicons.org/Linux/5791ac" /> &nbsp; For Linux, try alternate [PineFlash here](https://github.com/River-Mochi/PineFlash).
+<img width="20" src="https://cdn.simpleicons.org/Linux/5791ac" /> &nbsp; For Linux, try alternate [PineFlash here](https://github.com/Spagett1/PineFlash).
 <br><br>
 
  <a href="#">
